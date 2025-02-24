@@ -1,8 +1,9 @@
-<div align="center" style="padding: 12px; border: 2px solid #ffd700; background: #fffbe6; border-radius: 8px; margin-bottom: 24px;">
-  <strong>⚠️ Development Status Warning</strong><br/>
-  This library <code>whisper-node-addon</code> is currently in <strong>early experimental phase</strong>. APIs may change breakingly and production use is not recommended!<br/>
-  For stable & production-ready solutions, please use the mature library: <a href="https://github.com/ChetanXpro/nodejs-whisper">ChetanXpro/nodejs-whisper</a> 👈 or <a href="https://github.com/ggerganov/whisper.cpp">whisper.cpp</a>
-</div>
+# ⚠️ Development Status Warning
+
+This library <code>whisper-node-addon</code> is currently in <strong>early experimental phase</strong>. APIs may change breakingly and production use is not recommended!<br/>
+
+For stable & production-ready solutions, please use the mature library: <a href="https://github.com/ChetanXpro/nodejs-whisper">ChetanXpro/nodejs-whisper</a> 👈 or <a href="https://github.com/ggerganov/whisper.cpp">whisper.cpp</a>
+
 # whisper-node-addon 🌐🔉
 
 [![npm version](https://img.shields.io/npm/v/whisper.cpp-platform-bindings)](https://www.npmjs.com/package/whisper.cpp-platform-bindings)

@@ -1,9 +1,7 @@
+# ⚠️ 开发状态警告
+本库 <code>whisper-node-addon</code> 目前处于 <strong>早期实验阶段</strong>，API 可能发生重大变更，生产环境使用需谨慎！<br/>
 
-<div align="center" style="padding: 12px; border: 2px solid #ffd700; background: #fffbe6; border-radius: 8px; margin-bottom: 24px;">
-  <strong>⚠️ 开发状态警告</strong><br/>
-  本库 <code>whisper-node-addon</code> 目前处于 <strong>早期实验阶段</strong>，API 可能发生重大变更，生产环境使用需谨慎！<br/>
-  如需稳定可用的方案，请使用成熟库：<a href="https://github.com/ChetanXpro/nodejs-whisper">ChetanXpro/nodejs-whisper</a> 👈或<a href="https://github.com/ggerganov/whisper.cpp">whisper.cpp</a>
-</div>
+如需稳定可用的方案，请使用成熟库：<a href="https://github.com/ChetanXpro/nodejs-whisper">ChetanXpro/nodejs-whisper</a> 👈或<a href="https://github.com/ggerganov/whisper.cpp">whisper.cpp</a>
 
 # whisper-node-addon 🌐🔉
 
