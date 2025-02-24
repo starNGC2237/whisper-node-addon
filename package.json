@@ -2,8 +2,12 @@
   "name": "whisper-node-addon",
   "version": "0.0.1",
   "description": "a .node addon for whisper",
-  "main": "index.js",
-  "scripts": {},
+  "main": "dist/index.js",
+  "files": ["dist/**/*", "binaries/**/*"],
+  "scripts": {
+    "prepublishOnly": "npm run build"
+  },
+  "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/starNGC2237/whisper-node-addon.git"
