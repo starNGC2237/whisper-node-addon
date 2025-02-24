@@ -3,9 +3,18 @@
   "version": "0.0.1",
   "description": "a .node addon for whisper",
   "main": "dist/index.js",
-  "files": ["dist/**/*", "binaries/**/*"],
+  "files": [
+    "dist/**/*",
+    "binaries/**/*"
+  ],
   "scripts": {
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "postinstall": "git submodule update --init --recursive",
+    "clean": "shx rm -rf ./dist && mkdir dist",
+    "prebuild": "npm run clean",
+    "build": "npm run build:win-x64",
+    "build:win-x64": "cd deps/whisper.cpp && npx cmake-js compile -T addon.node --out=../../external_build && npm run build-after:win-x64",
+    "build-after:win-x64": "shx mkdir -p dist/win-x64 && shx cp -r external_build/bin/Release/* dist/win-x64/ && shx mv dist/win-x64/addon.node.node dist/win-x64/whisper.node"
   },
   "types": "dist/index.d.ts",
   "repository": {
@@ -21,5 +30,12 @@
   "bugs": {
     "url": "https://github.com/starNGC2237/whisper-node-addon/issues"
   },
-  "homepage": "https://github.com/starNGC2237/whisper-node-addon#readme"
+  "homepage": "https://github.com/starNGC2237/whisper-node-addon#readme",
+  "dependencies": {
+    "cmake-js": "^7.3.0",
+    "node-addon-api": "^8.3.1"
+  },
+  "devDependencies": {
+    "shx": "^0.3.4"
+  }
 }
