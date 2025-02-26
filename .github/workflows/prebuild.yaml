@@ -1,0 +1,61 @@
+name: Build Native Module
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ windows-latest, macos-latest, ubuntu-latest ]
+        electron_version: [ "31.7.7" ]  # 支持多个 Electron 版本
+        include:
+          - os: windows-latest
+            platform: win32
+            arch: x64
+          - os: macos-latest
+            platform: darwin
+            arch: x64
+          - os: ubuntu-latest
+            platform: linux
+            arch: x64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install CMake and Tools
+        run: |
+          if [ "${{ matrix.platform }}" = "win32" ]; then
+            choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
+          elif [ "${{ matrix.platform }}" = "darwin" ]; then
+            brew install cmake
+          else
+            sudo apt-get install cmake
+          fi
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build for Electron
+        run: |
+          npm run build:electron \
+            -- --platform=${{ matrix.platform }} \
+               --arch=${{ matrix.arch }} \
+               --runtime=electron \
+               --runtime-version=${{ matrix.electron_version }}
+
+      - name: Copy Artifacts to Prebuilds
+        run: node scripts/postbuild.js ${{ matrix.platform }} ${{ matrix.arch }} ${{ matrix.electron_version }}
+
+      - name: Upload Prebuilds
+        uses: actions/upload-artifact@v3
+        with:
+          name: prebuilds-${{ matrix.platform }}-${{ matrix.arch }}-electron-${{ matrix.electron_version }}
+          path: prebuilds/
