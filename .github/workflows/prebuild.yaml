@@ -28,21 +28,7 @@ jobs:
       - name: Build for Electron (Windows x64)
         shell: cmd  # 确保路径处理兼容 Windows
         run: |
-          cd deps/whisper.cpp
-          npx cmake-js compile ^
-            --runtime=electron ^
-            --runtime-version=31.7.7 ^
-            --abi=125 ^
-            --out=../../external_build
-          cd ../..
-          npm run build-after:win-x64
-
-      - name: Debug Directory Structure
-        run: |
-          echo "=== 查看 CMake 输出目录 external_build/bin/Release/ ==="
-          ls deps/whisper.cpp/external_build/bin/Release/
-          echo "=== 查看目标目录 dist/win-x64/ ==="
-          ls dist/win-x64/
+          npm run build
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
