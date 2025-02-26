@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         os: [ windows-latest, macos-latest, ubuntu-latest ]
-        electron_version: [ "31.7.7" ]  # 支持多个 Electron 版本
+        electron_version: [ "31.7.7" ]
         include:
           - os: windows-latest
             platform: win32
@@ -30,15 +30,24 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install CMake and Tools
+      - name: Install CMake (Windows)
+        if: matrix.os == 'windows-latest'
+        shell: pwsh
         run: |
-          if [ "${{ matrix.platform }}" = "win32" ]; then
-            choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' -y
-          elif [ "${{ matrix.platform }}" = "darwin" ]; then
-            brew install cmake
-          else
-            sudo apt-get install cmake
-          fi
+          choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' -y
+
+      - name: Install CMake (macOS)
+        if: matrix.os == 'macos-latest'
+        shell: bash
+        run: |
+          brew install cmake
+
+      - name: Install CMake (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake
 
       - name: Install Dependencies
         run: npm install
@@ -55,7 +64,7 @@ jobs:
         run: node scripts/postbuild.js ${{ matrix.platform }} ${{ matrix.arch }} ${{ matrix.electron_version }}
 
       - name: Upload Prebuilds
-        uses: actions/upload-artifact@v4  # 升级到 v4 版本
+        uses: actions/upload-artifact@v4
         with:
           name: prebuilds-${{ matrix.platform }}-${{ matrix.arch }}-electron-${{ matrix.electron_version }}
           path: prebuilds/
