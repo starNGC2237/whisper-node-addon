@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "a .node addon for whisper",
   "main": "dist/index.js",
+  "bin": {
+    "whisper-node-addon-environment-check": "./bin/environment-check.js"
+  },
   "files": [
     "dist/**/*",
     "binaries/**/*"
@@ -16,7 +19,6 @@
     "build:win-x64": "cd deps/whisper.cpp && npx cmake-js compile --runtime=electron --runtime-version=31.7.7 --abi=125  --out=../../external_build && npm run build-after:win-x64",
     "build-after:win-x64": "shx mkdir -p dist/win-x64 && shx cp -r external_build/bin/Release/* dist/win-x64/ && shx mv dist/win-x64/addon.node.node dist/win-x64/whisper.node"
   },
-  "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/starNGC2237/whisper-node-addon.git"
