@@ -101,5 +101,3 @@ lib/
 
 ## ⚖️ License
 MIT © 2025 starNGC2237
-
-text
