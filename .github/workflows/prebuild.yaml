@@ -1,4 +1,4 @@
-name: Build Native Module
+name: Build Native Module (Windows x64)
 on:
   push:
     branches: [ master ]
@@ -6,65 +6,39 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        os: [ windows-latest, macos-latest, ubuntu-latest ]
-        electron_version: [ "31.7.7" ]
-        include:
-          - os: windows-latest
-            platform: win32
-            arch: x64
-          - os: macos-latest
-            platform: darwin
-            arch: x64
-          - os: ubuntu-latest
-            platform: linux
-            arch: x64
-    runs-on: ${{ matrix.os }}
+  build-win-x64:
+    name: Build for Windows x64
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
-      - name: Install CMake (Windows)
-        if: matrix.os == 'windows-latest'
+      - name: Install CMake and Tools (Windows)
         shell: pwsh
         run: |
           choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' -y
 
-      - name: Install CMake (macOS)
-        if: matrix.os == 'macos-latest'
-        shell: bash
-        run: |
-          brew install cmake
-
-      - name: Install CMake (Linux)
-        if: matrix.os == 'ubuntu-latest'
-        shell: bash
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y cmake
-
       - name: Install Dependencies
         run: npm install
 
-      - name: Build for Electron
+      - name: Build for Electron (Windows x64)
+        shell: cmd  # 确保路径处理兼容 Windows
         run: |
-          npm run build:electron \
-            -- --platform=${{ matrix.platform }} \
-               --arch=${{ matrix.arch }} \
-               --runtime=electron \
-               --runtime-version=${{ matrix.electron_version }}
+          cd deps/whisper.cpp
+          npx cmake-js compile ^
+            --runtime=electron ^
+            --runtime-version=31.7.7 ^
+            --abi=125 ^
+            --out=../../external_build
+          cd ../..
+          npm run build-after:win-x64
 
-      - name: Copy Artifacts to Prebuilds
-        run: node scripts/postbuild.js ${{ matrix.platform }} ${{ matrix.arch }} ${{ matrix.electron_version }}
-
-      - name: Upload Prebuilds
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: prebuilds-${{ matrix.platform }}-${{ matrix.arch }}-electron-${{ matrix.electron_version }}
-          path: prebuilds/
+          name: whisper-node-win-x64
+          path: dist/win-x64/
