@@ -33,7 +33,7 @@ jobs:
       - name: Install CMake and Tools
         run: |
           if [ "${{ matrix.platform }}" = "win32" ]; then
-            choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
+            choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' -y
           elif [ "${{ matrix.platform }}" = "darwin" ]; then
             brew install cmake
           else
@@ -55,7 +55,7 @@ jobs:
         run: node scripts/postbuild.js ${{ matrix.platform }} ${{ matrix.arch }} ${{ matrix.electron_version }}
 
       - name: Upload Prebuilds
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4  # 升级到 v4 版本
         with:
           name: prebuilds-${{ matrix.platform }}-${{ matrix.arch }}-electron-${{ matrix.electron_version }}
           path: prebuilds/
