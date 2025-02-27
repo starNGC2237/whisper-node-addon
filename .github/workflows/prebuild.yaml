@@ -2,9 +2,6 @@ name: Build Native Module (Multi-Platform)
 on:
   push:
     tags: [ 'v*' ]  # 当推送 v 开头的 tag 时触发发布
-  pull_request:
-    branches: [ master ]
-
 jobs:
   build-multi-platform:
     name: Build for ${{ matrix.os }} (${{ matrix.arch }})
