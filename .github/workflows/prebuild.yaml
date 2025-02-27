@@ -16,11 +16,11 @@ jobs:
             arch: x64
             runs-on: windows-latest
             build-script: "build:win"
-          - os: macos
+          - os: mac
             arch: x64
             runs-on: macos-latest
             build-script: "build:mac"
-          - os: macos
+          - os: mac
             arch: arm64
             runs-on: macos-latest
             build-script: "build:mac"
