@@ -14,7 +14,7 @@ jobs:
             arch: x64
             runs-on: windows-latest
             build-script: "build:win"
-            zip-tool: "powershell Compress-Archive -Path dist/win-x64/* -DestinationPath dist/whisper-node-addon-win-x64-electron-31.7.7.zip"
+            zip-tool: "powershell Compress-Archive -Path 'dist/win-x64/*' -DestinationPath 'dist/whisper-node-addon-win-x64-electron-31.7.7.zip' -Force"
           - os: mac
             arch: x64
             runs-on: macos-latest
