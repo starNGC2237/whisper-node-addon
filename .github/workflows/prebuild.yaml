@@ -60,7 +60,7 @@ jobs:
       - name: Build for ${{ matrix.os }} (${{ matrix.arch }})
         shell: bash
         run: |
-          npm run ${{ matrix.build-script }} -- --arch=${{ matrix.arch }}
+          npm run ${{ matrix.build-script }}-${{ matrix.arch }}
         env:
           # 可选：传递平台和架构参数给构建脚本
           PLATFORM: ${{ matrix.os }}
