@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - os: windows
+          - os: win
             arch: x64
             runs-on: windows-latest
             build-script: "build:win"
