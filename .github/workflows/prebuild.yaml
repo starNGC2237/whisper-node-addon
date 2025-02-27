@@ -1,4 +1,4 @@
-name: Build Native Module (Windows x64)
+name: Build Native Module (Multi-Platform)
 on:
   push:
     branches: [ master ]
@@ -6,9 +6,30 @@ on:
     branches: [ master ]
 
 jobs:
-  build-win-x64:
-    name: Build for Windows x64
-    runs-on: windows-latest
+  build-multi-platform:
+    name: Build for ${{ matrix.os }} (${{ matrix.arch }})
+    runs-on: ${{ matrix.runs-on }}
+    strategy:
+      matrix:
+        include:
+          - os: windows
+            arch: x64
+            runs-on: windows-latest
+            build-script: "build:win"
+          - os: macos
+            arch: x64
+            runs-on: macos-latest
+            build-script: "build:mac"
+          - os: macos
+            arch: arm64
+            runs-on: macos-latest
+            build-script: "build:mac"
+          - os: linux
+            arch: x64
+            runs-on: ubuntu-latest
+            build-script: "build:linux"
+          # 扩展其他架构（如 linux-arm64）按需添加
+
     steps:
       - uses: actions/checkout@v4
 
@@ -17,21 +38,36 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install CMake and Tools (Windows)
-        shell: pwsh
+      - name: Install CMake and Tools
+        shell: bash
         run: |
-          choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' -y
+          case "${{ matrix.os }}" in
+            windows)
+              choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' -y
+              ;;
+            macos)
+              brew install cmake
+              ;;
+            linux)
+              sudo apt-get update
+              sudo apt-get install -y cmake
+              ;;
+          esac
 
       - name: Install Dependencies
         run: npm install
 
-      - name: Build for Electron (Windows x64)
-        shell: cmd  # 确保路径处理兼容 Windows
+      - name: Build for ${{ matrix.os }} (${{ matrix.arch }})
+        shell: bash
         run: |
-          npm run build
+          npm run ${{ matrix.build-script }} -- --arch=${{ matrix.arch }}
+        env:
+          # 可选：传递平台和架构参数给构建脚本
+          PLATFORM: ${{ matrix.os }}
+          ARCH: ${{ matrix.arch }}
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: whisper-node-addon-win-x64
-          path: dist/win-x64/
+          name: whisper-node-addon-${{ matrix.os }}-${{ matrix.arch }}
+          path: dist/${{ matrix.os }}-${{ matrix.arch }}/
