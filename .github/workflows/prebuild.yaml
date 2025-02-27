@@ -46,19 +46,26 @@ jobs:
             win)
               choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' -y
               ;;
-            mac|linux)
-              brew install cmake || sudo apt-get install -y cmake
+            macos)
+              brew install cmake
+              ;;
+            linux)
+              sudo apt-get update
+              sudo apt-get install -y cmake
               ;;
           esac
 
       - name: Install Dependencies
         run: npm install
 
-      - name: Build Project
+      - name: Build for ${{ matrix.os }} (${{ matrix.arch }})
         shell: bash
-        run: npm run ${{ matrix.build-script }} -- --arch=${{ matrix.arch }}
+        run: |
+          npm run ${{ matrix.build-script }}-${{ matrix.arch }}
         env:
-          ELECTRON_VERSION: 31.7.7  # 传递 Electron 版本参数
+          # 可选：传递平台和架构参数给构建脚本
+          PLATFORM: ${{ matrix.os }}
+          ARCH: ${{ matrix.arch }}
 
       - name: Create ZIP Package
         shell: bash
