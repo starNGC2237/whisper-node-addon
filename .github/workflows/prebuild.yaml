@@ -1,7 +1,8 @@
-name: Build Native Module (Multi-Platform)
+name: Build and Release
 on:
   push:
-    tags: [ 'v*' ]  # 当推送 v 开头的 tag 时触发发布
+    tags: [ 'v*' ]  # 仅通过 tag 触发
+
 jobs:
   build-multi-platform:
     name: Build for ${{ matrix.os }} (${{ matrix.arch }})
@@ -13,19 +14,22 @@ jobs:
             arch: x64
             runs-on: windows-latest
             build-script: "build:win"
+            zip-tool: "powershell Compress-Archive -Path dist/win-x64/* -DestinationPath dist/whisper-node-addon-win-x64-electron-31.7.7.zip"
           - os: mac
             arch: x64
             runs-on: macos-latest
             build-script: "build:mac"
+            zip-tool: "zip -r dist/whisper-node-addon-mac-x64-electron-31.7.7.zip dist/mac-x64/"
           - os: mac
             arch: arm64
             runs-on: macos-latest
             build-script: "build:mac"
+            zip-tool: "zip -r dist/whisper-node-addon-mac-arm64-electron-31.7.7.zip dist/mac-arm64/"
           - os: linux
             arch: x64
             runs-on: ubuntu-latest
             build-script: "build:linux"
-          # 扩展其他架构（如 linux-arm64）按需添加
+            zip-tool: "zip -r dist/whisper-node-addon-linux-x64-electron-31.7.7.zip dist/linux-x64/"
 
     steps:
       - uses: actions/checkout@v4
@@ -35,65 +39,65 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install CMake and Tools
+      - name: Install Build Tools
         shell: bash
         run: |
           case "${{ matrix.os }}" in
-            windows)
+            win)
               choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' -y
               ;;
-            macos)
-              brew install cmake
-              ;;
-            linux)
-              sudo apt-get update
-              sudo apt-get install -y cmake
+            mac|linux)
+              brew install cmake || sudo apt-get install -y cmake
               ;;
           esac
 
       - name: Install Dependencies
         run: npm install
 
-      - name: Build for ${{ matrix.os }} (${{ matrix.arch }})
+      - name: Build Project
+        shell: bash
+        run: npm run ${{ matrix.build-script }} -- --arch=${{ matrix.arch }}
+        env:
+          ELECTRON_VERSION: 31.7.7  # 传递 Electron 版本参数
+
+      - name: Create ZIP Package
         shell: bash
         run: |
-          npm run ${{ matrix.build-script }}-${{ matrix.arch }}
-        env:
-          # 可选：传递平台和架构参数给构建脚本
-          PLATFORM: ${{ matrix.os }}
-          ARCH: ${{ matrix.arch }}
+          mkdir -p dist
+          ${{ matrix.zip-tool }}
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: whisper-node-addon-${{ matrix.os }}-${{ matrix.arch }}
-          path: dist/${{ matrix.os }}-${{ matrix.arch }}/
-  # 新增 Release Job
+          path: dist/*.zip  # 只上传 ZIP 文件
+
   publish-release:
     name: Publish Release
-    needs: [build-multi-platform]  # 依赖构建任务
-    if: startsWith(github.ref, 'refs/tags/v')  # 仅在推送 tag 时运行
+    needs: [build-multi-platform]
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # 必须授予 Release 写入权限
+      contents: write
 
     steps:
-      - name: Download All Artifacts
+      - name: Download Artifacts
         uses: actions/download-artifact@v4
         with:
           path: artifacts
 
-      - name: Create Release
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref_name }}  # 使用触发的 tag 名称（如 v1.0.0）
-          name: Release ${{ github.ref_name }} ( electron 31.7.7 )
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }} (Electron 31.7.7)
           body: |
-            Multi-platform build for Whisper Node Addon
-            - Windows x64
-            - macOS x64/arm64
-            - Linux x64
+            Pre-compiled binaries for Electron 31.7.7
+            
+            **Supported Platforms**:
+            - 🪟 Windows x64
+            - 🍎 macOS x64/arm64
+            - 🐧 Linux x64
           files: |
-            artifacts/whisper-node-addon-*/*
+            artifacts/**/*.zip  # 只包含 ZIP 文件
           draft: false
           prerelease: false
