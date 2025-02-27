@@ -105,6 +105,6 @@ jobs:
             - 🍎 macOS x64/arm64
             - 🐧 Linux x64
           files: |
-            artifacts/**/*.zip  # 只包含 ZIP 文件
+            artifacts/*.zip
           draft: false
           prerelease: false
