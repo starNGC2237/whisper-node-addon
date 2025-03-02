@@ -14,4 +14,4 @@ export interface WhisperOptions {
 export interface WhisperParams extends WhisperOptions {
     [key: string]: any;
 }
-export declare function transcribe(options: WhisperOptions): Promise<string>;
+export declare function transcribe(options: WhisperOptions): Promise<string[][]>;

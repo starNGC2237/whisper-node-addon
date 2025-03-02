@@ -54,7 +54,7 @@ function loadAddon() {
 }
 
 // 主方法
-export async function transcribe(options: WhisperOptions): Promise<string> {
+export async function transcribe(options: WhisperOptions): Promise<string[][]> {
     const whisperAsync = loadAddon();
 
     // 合并默认参数
