@@ -1,21 +1,20 @@
 {
   "name": "whisper-node-addon",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "a .node addon for whisper",
-  "main": "dist/index.js",
-  "bin": {
-    "whisper-node-addon-environment-check": "./bin/environment-check.js"
-  },
+  "main": "./dist/index.js",
+  "types": "./index.d.ts",
   "files": [
-    "dist/**/*",
-    "binaries/**/*"
+    "dist",
+    "platform",
+    "index.d.ts"
   ],
   "scripts": {
     "prepublishOnly": "npm run build",
     "postinstall": "git submodule update --init --recursive",
     "clean": "shx rm -rf ./dist && mkdir dist",
     "prebuild": "npm run clean",
-    "build": "npm run build:win-x64",
+    "build": "tsc",
     "build:win-x64": "cd deps/whisper.cpp && npx cmake-js compile --runtime=electron --runtime-version=31.7.7 --abi=125  --out=../../external_build && npm run build-after:win-x64",
     "build-after:win-x64": "shx mkdir -p dist/win-x64 && shx cp -r external_build/bin/Release/* dist/win-x64/ && shx mv dist/win-x64/addon.node.node dist/win-x64/whisper.node",
     "build:mac-x64": "cd deps/whisper.cpp && npx cmake-js compile --runtime=electron --runtime-version=31.7.7 --abi=125  --out=../../external_build && npm run build-after:mac-x64",
@@ -45,6 +44,8 @@
     "node-addon-api": "^8.3.1"
   },
   "devDependencies": {
-    "shx": "^0.3.4"
+    "@types/node": "^22.13.8",
+    "shx": "^0.3.4",
+    "typescript": "^5.8.2"
   }
 }
