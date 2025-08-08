@@ -6,98 +6,51 @@ For stable & production-ready solutions, please use the mature library: <a href=
 
 # whisper-node-addon 🌐🔉
 
-[![npm version](https://img.shields.io/npm/v/whisper.cpp-platform-bindings)](https://www.npmjs.com/package/whisper.cpp-platform-bindings)
+[![npm version](https://img.shields.io/npm/v/whisper-node-addon)](https://www.npmjs.com/package/whisper.cpp-platform-bindings)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-**Automatic whisper.cpp bindings for Node.js & Electron across all platforms.**  
-No native compilation headaches. Just `require()` and go!
+**Automatic whisper.cpp bindings for Node.js & Electron across all platforms.**
 
 [简体中文](README-zh.md)
 
 ## ✨ Features
-- ✅ **Pre-built `.node` binaries** for Windows (x64), Linux (x64/arm64), macOS (x64/arm64)
-- ✅ **Automatic runtime detection** - Load correct binary for the current OS/arch
-- ✅ **Zero-config for Electron** - Seamless integration with Electron apps
-- ✅ **On-demand compilation** - Fallback to source compile if pre-built missing
-- ✅ **Optimized JS layer** - Minified & tree-shaken for production
-- ✅ **Supports whisper.cpp features** - Full API coverage (ASR, translation, streaming)
 
 ## 📦 Installation
 ```bash
-npm install whisper.cpp-platform-bindings
+npm i whisper-node-addon
 ```
 
 ## 🚀 Usage
 ```javascript
-const whisper = require('whisper.cpp-platform-bindings');
+import { transcribe } from 'whisper-node-addon/dist'
+const modelPath = path.resolve('./resources/models/ggml-base.bin')
 
 // Transcribe audio
-const result = await whisper.transcribe('audio.wav', {
-  model: 'ggml-base.en.bin',
-  language: 'en',
-  use_gpu: true // Auto-detects CUDA/Metal
-});
-
-console.log(result.text); 
-```
-
-## 🔧 Advanced Configuration
-Add to `package.json` to control build behavior:
-```json
-{
-  "whisper-bindings": {
-    "targets": ["win32-x64", "linux-arm64", "darwin-universal"],
-    "prebuild": true,
-    "minify": true,
-    "electron": "25.0.0"
-  }
+try {
+    const result = await transcribe({
+        language: 'zh',
+        model: modelPath,
+        fname_inp: tempFilePath,
+        translate: false
+    })
+    return result.reduce((pre, cur) => pre + (cur[2] || ''), '')
+} catch (err) {
+    console.error('Error:', err)
+    return ''
 }
 ```
 
 ## 🛠 Build from Source (Optional)
 ```bash
-# Build binaries for all platforms (requires Docker)
-npm run build:all
-
-# Or build for current platform
+# Build binaries for all platforms
 npm run build
 ```
 
 ## 📂 File Structure
-```
-dist/
-  win32-x64/
-    whisper.node (pre-built)
-    whisper.min.js
-  linux-x64/
-    ...
-src/
-  whisper.cpp (submodule)
-  binding.cc
-lib/
-  detector.js (runtime loader)
-  ...
-```
 
 ## 🤝 Contributing
-1. Clone with submodules:
-   ```bash
-   git clone --recurse-submodules https://github.com/your-repo/whisper.cpp-platform-bindings.git
-   ```
-2. Install dev deps:
-   ```bash
-   npm install -g node-gyp cmake-js
-   npm install
-   ```
-3. Send PRs!
 
 ## 📜 TODO
-- [ ] Add CI pipeline for automated cross-compilation (GitHub Actions)
-- [ ] Support FreeBSD/ARMv6
-- [ ] Benchmark GPU acceleration across platforms
-- [ ] Add TypeScript definitions
-- [ ] Implement WebAssembly fallback
-- [ ] Create CLI tool for model conversion
 
 ## ⚖️ License
 MIT © 2025 starNGC2237
