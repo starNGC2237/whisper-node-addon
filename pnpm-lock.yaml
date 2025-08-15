@@ -26,7 +26,7 @@ importers:
         version: 0.3.4
       typescript:
         specifier: ^5.8.2
-        version: 5.8.2
+        version: 5.9.2
 
 packages:
 
@@ -385,8 +385,8 @@ packages:
     resolution: {integrity: sha512-DZ4yORTwrbTj/7MZYq2w+/ZFdI6OZ/f9SFHR+71gIVUZhOQPHzVCLpvRnPgyaMpfWxxk/4ONva3GQSyNIKRv6A==}
     engines: {node: '>=10'}
 
-  typescript@5.8.2:
-    resolution: {integrity: sha512-aJn6wq13/afZp/jT9QZmwEjDqqvSGp1VT5GVg+f/t6/oVyrgXM6BY1h9BRh/O5p3PlUPAe+WuiEZOmb/49RqoQ==}
+  typescript@5.9.2:
+    resolution: {integrity: sha512-CWBzXQrc/qOkhidw1OzBTQuYRbfyxDXJMVJ1XNwUHGROVmuaeiEm3OslpZ1RV96d7SKKjZKrSJu3+t/xlw3R9A==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -788,7 +788,7 @@ snapshots:
       mkdirp: 1.0.4
       yallist: 4.0.0
 
-  typescript@5.8.2: {}
+  typescript@5.9.2: {}
 
   undici-types@6.20.0: {}
 
