@@ -32,7 +32,7 @@ jobs:
             zip-tool: "zip -r dist/whisper-node-addon-linux-x64-electron-31.7.7.zip dist/linux-x64/"
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
