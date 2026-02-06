@@ -1,7 +1,7 @@
 import { platform, arch } from 'os';
 import { join, resolve } from 'path';
 import { promisify } from 'util';
-import { existsSync, createWriteStream, mkdirSync } from 'fs';
+import { existsSync, createWriteStream, mkdirSync, unlinkSync } from 'fs';
 import { get as httpsGet } from 'https';
 import { IncomingMessage } from 'http';
 
@@ -190,13 +190,14 @@ export async function downloadModel(options: ModelDownloadOptions): Promise<stri
                 });
 
                 fileStream.on('finish', () => {
-                    fileStream.close();
-                    resolvePromise(outputPath);
+                    fileStream.close(() => resolvePromise(outputPath));
                 });
 
                 fileStream.on('error', (err) => {
-                    fileStream.close();
-                    reject(err);
+                    fileStream.close(() => {
+                        unlinkSync(outputPath);
+                        reject(err);
+                    });
                 });
             }).on('error', reject);
         };

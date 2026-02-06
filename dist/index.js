@@ -132,12 +132,13 @@ function downloadModel(options) {
                         }
                     });
                     fileStream.on('finish', () => {
-                        fileStream.close();
-                        resolvePromise(outputPath);
+                        fileStream.close(() => resolvePromise(outputPath));
                     });
                     fileStream.on('error', (err) => {
-                        fileStream.close();
-                        reject(err);
+                        fileStream.close(() => {
+                            (0, fs_1.unlinkSync)(outputPath);
+                            reject(err);
+                        });
                     });
                 }).on('error', reject);
             };
