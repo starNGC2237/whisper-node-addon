@@ -7,11 +7,12 @@
   "files": [
     "dist",
     "platform",
+    "scripts",
     "index.d.ts"
   ],
   "scripts": {
     "prepublishOnly": "npm run build",
-    "postinstall": "git submodule update --init --recursive",
+    "postinstall": "node scripts/install.js",
     "clean": "shx rm -rf ./dist && mkdir dist",
     "prebuild": "npm run clean",
     "build": "tsc",

@@ -20,6 +20,21 @@ For stable & production-ready solutions, please use the mature library: <a href=
 npm i whisper-node-addon
 ```
 
+During installation, you will be prompted to select a runtime (Node.js or Electron) and its version. The native addon will be automatically compiled for your environment.
+
+### Non-interactive / CI Mode
+
+Set environment variables to skip the interactive prompts:
+```bash
+# Build for Node.js
+WHISPER_RUNTIME=node WHISPER_RUNTIME_VERSION=20.0.0 npm i whisper-node-addon
+
+# Build for Electron
+WHISPER_RUNTIME=electron WHISPER_RUNTIME_VERSION=31.7.7 npm i whisper-node-addon
+```
+
+When running in a non-TTY environment (e.g. CI pipelines), the script defaults to building for the current Node.js version.
+
 ## 🚀 Usage
 ```javascript
 import { transcribe } from 'whisper-node-addon/dist'
