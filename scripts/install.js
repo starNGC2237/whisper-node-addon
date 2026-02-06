@@ -9,6 +9,7 @@ const fs = require('fs');
 const ROOT_DIR = path.resolve(__dirname, '..');
 const DEPS_DIR = path.join(ROOT_DIR, 'deps', 'whisper.cpp');
 const EXTERNAL_BUILD_DIR = path.join(ROOT_DIR, 'external_build');
+const WHISPER_CPP_REPO_URL = 'https://github.com/ggerganov/whisper.cpp.git';
 
 // Platform detection
 const currentPlatform = os.platform();
@@ -28,7 +29,10 @@ function getAbi(runtime, version) {
     const nodeAbi = require('node-abi');
     return nodeAbi.getAbi(version, runtime);
   } catch (e) {
-    console.error('Failed to get ABI:', e.message);
+    console.error(
+      `Failed to get ABI for ${runtime} v${version}: ${e.message}\n` +
+        'Please ensure "node-abi" is installed (npm install node-abi).'
+    );
     process.exit(1);
   }
 }
@@ -45,6 +49,7 @@ function ensureWhisperCppSource() {
     }
   } catch (_) {
     // Submodule may not work (e.g. installed from npm tarball)
+    console.log('Git submodule not available, trying alternative method...');
   }
 
   // If submodule failed, try cloning
@@ -53,7 +58,7 @@ function ensureWhisperCppSource() {
     fs.mkdirSync(path.join(ROOT_DIR, 'deps'), { recursive: true });
     try {
       execSync(
-        'git clone --depth 1 https://github.com/ggerganov/whisper.cpp.git',
+        `git clone --depth 1 ${WHISPER_CPP_REPO_URL}`,
         {
           cwd: path.join(ROOT_DIR, 'deps'),
           stdio: 'inherit',
@@ -177,7 +182,7 @@ function copyBuildOutput() {
     const src = path.join(buildOutputDir, file);
     if (!fs.statSync(src).isFile()) continue;
     let destName = file;
-    // Rename addon.node.node to whisper.node
+    // cmake-js outputs the addon as "addon.node.node"; rename to "whisper.node" for runtime loading
     if (file === 'addon.node.node') {
       destName = 'whisper.node';
     }
