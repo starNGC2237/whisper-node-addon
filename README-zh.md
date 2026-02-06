@@ -17,6 +17,21 @@
 npm i whisper-node-addon
 ```
 
+安装过程中，系统会提示你选择运行时（Node.js 或 Electron）及其版本号，随后自动编译适配你环境的原生插件。
+
+### 非交互模式 / CI 环境
+
+通过设置环境变量可跳过交互提示：
+```bash
+# 为 Node.js 构建
+WHISPER_RUNTIME=node WHISPER_RUNTIME_VERSION=20.0.0 npm i whisper-node-addon
+
+# 为 Electron 构建
+WHISPER_RUNTIME=electron WHISPER_RUNTIME_VERSION=31.7.7 npm i whisper-node-addon
+```
+
+在非 TTY 环境（如 CI 流水线）中运行时，脚本默认为当前 Node.js 版本构建。
+
 ## 🚀 快速使用
 ```javascript
 import { transcribe } from 'whisper-node-addon/dist'
