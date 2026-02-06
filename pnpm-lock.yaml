@@ -16,7 +16,7 @@ importers:
         version: 3.87.0
       node-addon-api:
         specifier: ^8.3.1
-        version: 8.3.1
+        version: 8.5.0
     devDependencies:
       '@types/node':
         specifier: ^22.13.8
@@ -292,8 +292,8 @@ packages:
     resolution: {integrity: sha512-+CGM1L1CgmtheLcBuleyYOn7NWPVu0s0EJH2C4puxgEZb9h8QpR9G2dBfZJOAUhi7VQxuBPMd0hiISWcTyiYyQ==}
     engines: {node: '>=10'}
 
-  node-addon-api@8.3.1:
-    resolution: {integrity: sha512-lytcDEdxKjGJPTLEfW4mYMigRezMlyJY8W4wxJK8zE533Jlb8L8dRuObJFWg2P+AuOIxoCgKF+2Oq4d4Zd0OUA==}
+  node-addon-api@8.5.0:
+    resolution: {integrity: sha512-/bRZty2mXUIFY/xU5HLvveNHlswNJej+RnxBjOMkidWfwZzgTbPG1E3K5TOxRLOR+5hX7bSofy8yf1hZevMS8A==}
     engines: {node: ^18 || ^20 || >= 21}
 
   node-api-headers@1.5.0:
@@ -702,7 +702,7 @@ snapshots:
     dependencies:
       semver: 7.7.3
 
-  node-addon-api@8.3.1: {}
+  node-addon-api@8.5.0: {}
 
   node-api-headers@1.5.0: {}
 
