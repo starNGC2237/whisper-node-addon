@@ -13,7 +13,7 @@ importers:
         version: 7.3.0
       node-abi:
         specifier: ^3.74.0
-        version: 3.87.0
+        version: 3.98.0
       node-addon-api:
         specifier: ^8.3.1
         version: 8.3.1
@@ -288,8 +288,8 @@ packages:
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
 
-  node-abi@3.87.0:
-    resolution: {integrity: sha512-+CGM1L1CgmtheLcBuleyYOn7NWPVu0s0EJH2C4puxgEZb9h8QpR9G2dBfZJOAUhi7VQxuBPMd0hiISWcTyiYyQ==}
+  node-abi@3.98.0:
+    resolution: {integrity: sha512-Llh8noNw7s15m+rmIrZnZQbe4gLyasL9loT74rC92PkmwWKeEedKvc7o6pjp8B3MhrYT/Cl846NOYZbz1wmddw==}
     engines: {node: '>=10'}
 
   node-addon-api@8.3.1:
@@ -698,7 +698,7 @@ snapshots:
 
   ms@2.1.3: {}
 
-  node-abi@3.87.0:
+  node-abi@3.98.0:
     dependencies:
       semver: 7.7.3
 
