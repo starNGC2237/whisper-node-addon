@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.13.8",
-    "shx": "^0.3.4",
+    "shx": "^0.4.0",
     "typescript": "^5.8.2"
   }
 }
